@@ -222,12 +222,12 @@ export default function Home() {
       <section id="hero" style={{
         minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center",
         justifyContent: "center", padding: "120px 24px 80px", textAlign: "center", position: "relative",
-        backgroundImage: "radial-gradient(circle at 1px 1px, rgba(15,184,142,0.03) 1px, transparent 0)",
+        backgroundImage: "radial-gradient(circle at 1px 1px, rgba(15,184,142,0.07) 1px, transparent 0)",
         backgroundSize: "40px 40px",
       }}>
         <div style={{
-          position: "absolute", top: "20%", left: "50%", width: 400, height: 400,
-          background: "radial-gradient(circle, rgba(15,184,142,0.08) 0%, transparent 70%)",
+          position: "absolute", top: "20%", left: "50%", width: 700, height: 700,
+          background: "radial-gradient(circle, rgba(15,184,142,0.18) 0%, rgba(15,184,142,0.06) 40%, transparent 70%)",
           transform: "translate(-50%, -50%)", borderRadius: "50%", pointerEvents: "none",
         }}/>
         <div style={{ marginBottom: 32, animation: "fadeUp 0.7s ease-out both" }}><Logo size="lg" /></div>
@@ -403,7 +403,7 @@ export default function Home() {
             width: 80, height: 80, borderRadius: "50%", background: "rgba(15,184,142,0.13)",
             display: "flex", alignItems: "center", justifyContent: "center",
             margin: "0 auto 24px", fontSize: 28, fontWeight: 700, color: "#0FB88E",
-          }}>SS</div>
+          }}><HourglassIcon size={36} color="#0FB88E"/></div>
           <p style={{ fontSize: 17, color: "rgba(192,216,208,0.65)", lineHeight: 1.8, marginBottom: 20 }}>
             שמי סמי סייף, ואני עוזר לבעלי עסקים קטנים ובינוניים בישראל להפסיק לבזבז זמן על דברים שמכונה יכולה לעשות טוב יותר.
           </p>
