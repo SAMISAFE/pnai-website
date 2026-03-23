@@ -37,7 +37,7 @@ function Logo({ size = "md", light = false }) {
   const textColor = light ? "#0E2820" : "#E4F4EE"
   const accent = light ? "#0A8560" : "#0FB88E"
   return (
-    <div style={{ display: "inline-flex", alignItems: "center", gap: s.font * 0.05, userSelect: "none" }}>
+    <div dir="ltr" style={{ display: "inline-flex", alignItems: "center", gap: s.font * 0.05, userSelect: "none" }}>
       <span style={{ fontFamily: "'Heebo', 'Helvetica Neue', Arial, sans-serif", fontSize: s.font, fontWeight: 700, color: textColor, letterSpacing: 1, lineHeight: 1 }}>PN</span>
       <HourglassSvg size={s.icon} color={accent} />
       <span style={{ fontFamily: "'Heebo', 'Helvetica Neue', Arial, sans-serif", fontSize: s.font, fontWeight: 700, color: accent, letterSpacing: 1, lineHeight: 1 }}>AI</span>
