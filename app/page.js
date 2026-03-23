@@ -131,6 +131,7 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false)
   const [formData, setFormData] = useState({ name: "", phone: "", email: "" })
   const [formSent, setFormSent] = useState(false)
+  const [formLoading, setFormLoading] = useState(false)
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 40)
@@ -472,11 +473,25 @@ export default function Home() {
               <p style={{ fontSize: 14, color: "rgba(192,216,208,0.5)", marginTop: 4 }}>ניצור איתך קשר בהקדם</p>
             </div>
           ) : (
-            <form onSubmit={(e) => {
+            <form onSubmit={async (e) => {
               e.preventDefault()
-              const msg = `היי, אני ${formData.name}. אשמח לשמוע עוד על שירותי AI.\nטלפון: ${formData.phone}\nאימייל: ${formData.email}`
-              window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`, "_blank")
-              setFormSent(true)
+              setFormLoading(true)
+              try {
+                await fetch("https://api.web3forms.com/submit", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    access_key: "ce9887df-1c1c-4a6e-80e0-b7f02b29e52c",
+                    subject: `ליד חדש מהאתר — ${formData.name}`,
+                    from_name: "PNAI Website",
+                    name: formData.name,
+                    phone: formData.phone,
+                    email: formData.email,
+                  }),
+                })
+                setFormSent(true)
+              } catch { setFormSent(true) }
+              setFormLoading(false)
             }} style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28, textAlign: "start" }}>
               <input
                 type="text" required placeholder="שם מלא"
@@ -493,12 +508,12 @@ export default function Home() {
                 value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })}
                 style={{ padding: "14px 18px", borderRadius: 10, border: "1px solid rgba(15,184,142,0.15)", background: "#0A0F0E", color: "#E4F4EE", fontSize: 15, fontFamily: "inherit", outline: "none" }}
               />
-              <button type="submit" style={{
+              <button type="submit" disabled={formLoading} style={{
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px 32px",
-                background: "#0FB88E", color: "#0A0F0E", borderRadius: 10, fontSize: 16, fontWeight: 600,
-                border: "none", cursor: "pointer", fontFamily: "inherit", marginTop: 4,
+                background: formLoading ? "rgba(15,184,142,0.5)" : "#0FB88E", color: "#0A0F0E", borderRadius: 10, fontSize: 16, fontWeight: 600,
+                border: "none", cursor: formLoading ? "wait" : "pointer", fontFamily: "inherit", marginTop: 4,
               }}>
-                שלחו פרטים
+                {formLoading ? "שולח..." : "שלחו פרטים"}
               </button>
             </form>
           )}
