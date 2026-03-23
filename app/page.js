@@ -12,8 +12,6 @@ const CONFIG = {
   email: "sami@pnai.co.il",
   phone: "054-XXX-XXXX",
   domain: "pnai.co.il",
-  tier1Price: "החל מ-₪2,500",
-  tier2Price: "החל מ-₪7,500",
 }
 // ============================================
 
@@ -84,7 +82,7 @@ function ArrowLeft() {
 const services = [
   {
     tier: "Tier 1", title: "אבחון AI + המלצות", subtitle: "ייעוץ",
-    price: CONFIG.tier1Price, highlighted: false, cta: "בואו נדבר",
+    highlighted: false, cta: "בואו נדבר",
     features: [
       "שיחת גילוי מעמיקה על העסק שלך",
       "זיהוי נקודות כאב ובזבוז זמן",
@@ -94,7 +92,7 @@ const services = [
   },
   {
     tier: "Tier 2", title: "אבחון + יישום מלא", subtitle: "הכל כלול",
-    price: CONFIG.tier2Price, highlighted: true, cta: "בואו נתחיל",
+    highlighted: true, cta: "בואו נתחיל",
     features: [
       "הכל מ-Tier 1",
       "בנייה והטמעה של הפתרונות",
@@ -295,7 +293,7 @@ export default function Home() {
               <div style={{ fontSize: 12, color: "#0FB88E", fontWeight: 500, marginBottom: 8, letterSpacing: 1 }}>{svc.tier}</div>
               <h3 style={{ fontSize: 24, fontWeight: 700, color: "#E4F4EE", marginBottom: 4 }}>{svc.title}</h3>
               <p style={{ fontSize: 14, color: "rgba(192,216,208,0.4)", marginBottom: 20 }}>{svc.subtitle}</p>
-              <div style={{ fontSize: 28, fontWeight: 700, color: "#0FB88E", marginBottom: 24 }}>{svc.price}</div>
+              <div style={{ fontSize: 16, fontWeight: 500, color: "#0FB88E", marginBottom: 24 }}>מחיר מותאם אישית</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28 }}>
                 {svc.features.map((f, j) => (
                   <div key={j} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
