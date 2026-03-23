@@ -6,7 +6,7 @@ import { useState, useEffect } from "react"
 // EDIT THESE VALUES FOR YOUR BUSINESS
 // ============================================
 const CONFIG = {
-  whatsappNumber: "972541234567",        // ← Replace with your real WhatsApp number
+  whatsappNumber: "972509976635",
   whatsappMessage: "היי! אני מעוניין לשמוע עוד על שירותי AI לעסק שלי",
   ownerName: "Sami Safe",
   email: "sami@pnai.co.il",
@@ -129,6 +129,8 @@ export default function Home() {
   const [mobileMenu, setMobileMenu] = useState(false)
   const [openFaq, setOpenFaq] = useState(null)
   const [scrolled, setScrolled] = useState(false)
+  const [formData, setFormData] = useState({ name: "", phone: "", email: "" })
+  const [formSent, setFormSent] = useState(false)
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 40)
@@ -461,9 +463,50 @@ export default function Home() {
           <p style={{ fontSize: 16, color: "rgba(192,216,208,0.4)", marginBottom: 32 }}>
             שיחה קצרה. בלי התחייבות. בואו נבדוק מה AI יכול לעשות לעסק שלכם.
           </p>
+
+          {/* Contact Form */}
+          {formSent ? (
+            <div style={{ padding: 24, borderRadius: 12, background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.2)", marginBottom: 28 }}>
+              <CheckIcon />
+              <p style={{ fontSize: 18, fontWeight: 600, color: "#E4F4EE", marginTop: 8 }}>תודה! קיבלנו את הפרטים</p>
+              <p style={{ fontSize: 14, color: "rgba(192,216,208,0.5)", marginTop: 4 }}>ניצור איתך קשר בהקדם</p>
+            </div>
+          ) : (
+            <form onSubmit={(e) => {
+              e.preventDefault()
+              const msg = `היי, אני ${formData.name}. אשמח לשמוע עוד על שירותי AI.\nטלפון: ${formData.phone}\nאימייל: ${formData.email}`
+              window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`, "_blank")
+              setFormSent(true)
+            }} style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28, textAlign: "start" }}>
+              <input
+                type="text" required placeholder="שם מלא"
+                value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })}
+                style={{ padding: "14px 18px", borderRadius: 10, border: "1px solid rgba(15,184,142,0.15)", background: "#0A0F0E", color: "#E4F4EE", fontSize: 15, fontFamily: "inherit", outline: "none" }}
+              />
+              <input
+                type="tel" required placeholder="מספר טלפון"
+                value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                style={{ padding: "14px 18px", borderRadius: 10, border: "1px solid rgba(15,184,142,0.15)", background: "#0A0F0E", color: "#E4F4EE", fontSize: 15, fontFamily: "inherit", outline: "none" }}
+              />
+              <input
+                type="email" required placeholder="אימייל"
+                value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })}
+                style={{ padding: "14px 18px", borderRadius: 10, border: "1px solid rgba(15,184,142,0.15)", background: "#0A0F0E", color: "#E4F4EE", fontSize: 15, fontFamily: "inherit", outline: "none" }}
+              />
+              <button type="submit" style={{
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px 32px",
+                background: "#0FB88E", color: "#0A0F0E", borderRadius: 10, fontSize: 16, fontWeight: 600,
+                border: "none", cursor: "pointer", fontFamily: "inherit", marginTop: 4,
+              }}>
+                שלחו פרטים
+              </button>
+            </form>
+          )}
+
+          <p style={{ fontSize: 13, color: "rgba(192,216,208,0.3)", marginBottom: 16 }}>או דברו איתנו ישירות</p>
           <a href={waLink} target="_blank" rel="noopener noreferrer" style={{
             display: "inline-flex", alignItems: "center", gap: 8, padding: "16px 40px",
-            background: "#0FB88E", color: "#0A0F0E", borderRadius: 10, fontSize: 18, fontWeight: 500,
+            background: "transparent", color: "#0FB88E", border: "1.5px solid rgba(15,184,142,0.25)", borderRadius: 10, fontSize: 18, fontWeight: 500,
           }}>
             <WhatsAppIcon /> דברו איתנו בוואטסאפ
           </a>
