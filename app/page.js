@@ -20,20 +20,22 @@ const CONFIG = {
 const waLink = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(CONFIG.whatsappMessage)}`
 
 function Logo({ size = "md", light = false }) {
-  const scales = { sm: 0.45, md: 0.6, lg: 1 }
+  const scales = { sm: 0.55, md: 0.7, lg: 1 }
   const s = scales[size] || scales.md
-  const textFill = light ? "#0E2820" : "#C0D8D0"
+  const textFill = light ? "#0E2820" : "#E4F4EE"
   const accent = light ? "#0A8560" : "#0FB88E"
   return (
-    <svg width={220 * s} height={52 * s} viewBox="0 0 220 52" fill="none">
-      <text x="0" y="42" fontFamily="'Helvetica Neue', Arial, sans-serif" fontSize="44" fontWeight="300" fill={textFill} letterSpacing="1">P</text>
-      <text x="26" y="42" fontFamily="'Helvetica Neue', Arial, sans-serif" fontSize="44" fontWeight="300" fill={textFill} letterSpacing="1">N</text>
-      <path d="M62,4 L82,4 L72,26 L82,48 L62,48 L72,26 Z" fill="none" stroke={accent} strokeWidth="2.2" strokeLinejoin="round"/>
-      <circle cx="72" cy="38" r="2" fill={accent} opacity="0.9"/>
-      <circle cx="69" cy="41.5" r="1.3" fill={accent} opacity="0.5"/>
-      <circle cx="75" cy="41.5" r="1.3" fill={accent} opacity="0.5"/>
-      <circle cx="72" cy="14" r="1.6" fill={accent} opacity="0.3"/>
-      <text x="90" y="42" fontFamily="'Helvetica Neue', Arial, sans-serif" fontSize="44" fontWeight="600" fill={accent} letterSpacing="1">AI</text>
+    <svg width={180 * s} height={48 * s} viewBox="0 0 180 48" fill="none">
+      {/* PN */}
+      <text x="0" y="38" fontFamily="'Heebo', 'Helvetica Neue', Arial, sans-serif" fontSize="40" fontWeight="700" fill={textFill} letterSpacing="1">PN</text>
+      {/* Hourglass */}
+      <path d="M82,6 L100,6 L91,24 L100,42 L82,42 L91,24 Z" fill="none" stroke={accent} strokeWidth="2.2" strokeLinejoin="round"/>
+      <circle cx="91" cy="34" r="2" fill={accent} opacity="0.9"/>
+      <circle cx="88" cy="37" r="1.3" fill={accent} opacity="0.5"/>
+      <circle cx="94" cy="37" r="1.3" fill={accent} opacity="0.5"/>
+      <circle cx="91" cy="13" r="1.4" fill={accent} opacity="0.35"/>
+      {/* AI */}
+      <text x="108" y="38" fontFamily="'Heebo', 'Helvetica Neue', Arial, sans-serif" fontSize="40" fontWeight="700" fill={accent} letterSpacing="1">AI</text>
     </svg>
   )
 }
@@ -41,10 +43,11 @@ function Logo({ size = "md", light = false }) {
 function HourglassIcon({ size = 40, color = "#0FB88E" }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
-      <path d="M10,4 L30,4 L20,20 L30,36 L10,36 L20,20 Z" fill="none" stroke={color} strokeWidth="2" strokeLinejoin="round"/>
-      <circle cx="20" cy="28" r="2.5" fill={color} opacity="0.9"/>
-      <circle cx="16.5" cy="31" r="1.5" fill={color} opacity="0.5"/>
-      <circle cx="23.5" cy="31" r="1.5" fill={color} opacity="0.5"/>
+      <path d="M8,4 L32,4 L20,20 L32,36 L8,36 L20,20 Z" fill="none" stroke={color} strokeWidth="2.2" strokeLinejoin="round"/>
+      <circle cx="20" cy="28" r="2.2" fill={color} opacity="0.9"/>
+      <circle cx="16.5" cy="31.5" r="1.4" fill={color} opacity="0.5"/>
+      <circle cx="23.5" cy="31.5" r="1.4" fill={color} opacity="0.5"/>
+      <circle cx="20" cy="11" r="1.5" fill={color} opacity="0.35"/>
     </svg>
   )
 }
