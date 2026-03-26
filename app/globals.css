@@ -41,13 +41,4 @@ button {
   50% { transform: translateY(-8px); }
 }
 
-/* Move Tidio widget to bottom-left */
-#tidio-chat {
-  left: 0 !important;
-  right: auto !important;
-}
-#tidio-chat iframe {
-  left: 0 !important;
-  right: auto !important;
-}
 
