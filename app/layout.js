@@ -25,11 +25,6 @@ export default function RootLayout({ children }) {
       <body>
         {children}
         <script src="//code.tidio.co/ervin220kdzm3c16kpfbae3ygkyznre6.js" async></script>
-        <script dangerouslySetInnerHTML={{ __html: `
-          document.addEventListener("tidioChat-ready", function () {
-            window.tidioChatApi.hide();
-          });
-        `}} />
       </body>
     </html>
   )
