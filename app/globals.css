@@ -41,11 +41,3 @@ button {
   50% { transform: translateY(-8px); }
 }
 
-/* Hide Tidio's default launcher button so our custom one shows instead */
-#tidio-chat iframe[style*="bottom"] {
-  pointer-events: none !important;
-}
-#tidio-chat-code {
-  z-index: 1 !important;
-}
-
