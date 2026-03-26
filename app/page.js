@@ -579,13 +579,13 @@ export default function Home() {
       {/* FLOATING TIDIO CHAT BUTTON */}
       {tidioReady && (
         <button onClick={() => { if (window.tidioChatApi) { window.tidioChatApi.show(); window.tidioChatApi.open(); } }} style={{
-          position: "fixed", bottom: 24, right: 24, zIndex: 100,
-          width: 56, height: 56, borderRadius: "50%", background: "#1B73E8",
+          position: "fixed", bottom: 24, right: 24, zIndex: 99999,
+          width: 56, height: 56, borderRadius: "50%", backgroundColor: "#1B73E8",
           display: "flex", alignItems: "center", justifyContent: "center", color: "white",
-          boxShadow: "0 4px 20px rgba(27,115,232,0.35)", animation: "float 3s ease-in-out infinite",
-          border: "none", cursor: "pointer",
+          boxShadow: "0 4px 20px rgba(27,115,232,0.5)", animation: "float 3s ease-in-out infinite",
+          border: "none", cursor: "pointer", WebkitAppearance: "none", opacity: 1,
         }}>
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
           </svg>
         </button>
