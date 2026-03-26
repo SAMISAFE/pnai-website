@@ -22,7 +22,10 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#0A0F0E" />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <script src="//code.tidio.co/ervin220kdzm3c16kpfbae3ygkyznre6.js" async></script>
+      </body>
     </html>
   )
 }
