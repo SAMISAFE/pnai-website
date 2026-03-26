@@ -1,4 +1,5 @@
 import './globals.css'
+import Script from 'next/script'
 
 export const metadata = {
   title: 'PNAI | AI Consulting — הזמן שלך יקר לנו',
@@ -24,7 +25,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         {children}
-        <script src="//code.tidio.co/ervin220kdzm3c16kpfbae3ygkyznre6.js" async></script>
+        <Script src="https://code.tidio.co/ervin220kdzm3c16kpfbae3ygkyznre6.js" strategy="afterInteractive" />
       </body>
     </html>
   )

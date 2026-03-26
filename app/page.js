@@ -161,7 +161,7 @@ export default function Home() {
   return (
     <>
       {/* NAV */}
-      <nav style={{
+      <nav className="main-nav" style={{
         position: "fixed", top: 0, right: 0, left: 0, zIndex: 50,
         padding: "12px 24px",
         background: scrolled ? "#0A0F0E" : "transparent",
@@ -206,6 +206,12 @@ export default function Home() {
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
           .mobile-menu-btn { display: flex !important; }
+          .main-nav {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border-bottom-color: transparent !important;
+          }
         }
       `}</style>
 
