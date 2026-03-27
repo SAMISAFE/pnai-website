@@ -25,7 +25,10 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         {children}
-        <Script src="https://code.tidio.co/ervin220kdzm3c16kpfbae3ygkyznre6.js" strategy="afterInteractive" />
+        <Script
+          src="https://code.tidio.co/ervin220kdzm3c16kpfbae3ygkyznre6.js"
+          strategy="beforeInteractive"
+        />
       </body>
     </html>
   )
