@@ -26,8 +26,28 @@ export default function RootLayout({ children }) {
       <body>
         {children}
         <Script
-          src="https://code.tidio.co/ervin220kdzm3c16kpfbae3ygkyznre6.js"
-          strategy="beforeInteractive"
+          id="voiceflow-widget"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(d, t) {
+                var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+                v.onload = function() {
+                  window.voiceflow.chat.load({
+                    verify: { projectID: '69c4f33d1c4b150d1e9a8ed1' },
+                    url: 'https://general-runtime.voiceflow.com',
+                    versionID: 'production',
+                    voice: {
+                      url: "https://runtime-api.voiceflow.com"
+                    }
+                  });
+                }
+                v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
+                v.type = "text/javascript";
+                s.parentNode.insertBefore(v, s);
+              })(document, 'script');
+            `,
+          }}
         />
       </body>
     </html>
