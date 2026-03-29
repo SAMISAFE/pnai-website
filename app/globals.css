@@ -9,12 +9,26 @@ html {
 }
 
 body {
-  overflow-x: hidden;
   font-family: 'Heebo', 'Helvetica Neue', Arial, sans-serif;
   background: #0A0F0E;
   color: #C0D8D0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent horizontal scroll without breaking fixed-position widgets like Tidio */
+#__next {
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Force GPU layer for Tidio chat widget to fix mobile visibility bug */
+#tidio-chat,
+#tidio-chat-iframe {
+  -webkit-transform: translateZ(0) !important;
+  transform: translateZ(0) !important;
+  -webkit-backface-visibility: hidden !important;
+  backface-visibility: hidden !important;
 }
 
 ::selection {
