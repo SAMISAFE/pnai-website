@@ -552,7 +552,7 @@ export default function Home() {
 
       {/* FLOATING WHATSAPP */}
       <a href={waLink} target="_blank" rel="noopener noreferrer" style={{
-        position: "fixed", bottom: 24, left: 24, zIndex: 100,
+        position: "fixed", bottom: 100, left: 24, zIndex: 100,
         width: 56, height: 56, borderRadius: "50%", background: "#25D366",
         display: "flex", alignItems: "center", justifyContent: "center", color: "white",
         boxShadow: "0 4px 20px rgba(37,211,102,0.25)", animation: "float 3s ease-in-out infinite",
