@@ -226,6 +226,7 @@ export default function Home() {
       <section id="hero" style={{
         minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center",
         justifyContent: "center", padding: "120px 24px 80px", textAlign: "center", position: "relative",
+        overflow: "hidden",
         backgroundImage: "radial-gradient(circle at 1px 1px, rgba(15,184,142,0.07) 1px, transparent 0)",
         backgroundSize: "40px 40px",
       }}>

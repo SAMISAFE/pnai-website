@@ -22,13 +22,13 @@ export default function RootLayout({ children }) {
         <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#0A0F0E" />
+        <Script
+          src="https://code.tidio.co/ervin220kdzm3c16kpfbae3ygkyznre6.js"
+          strategy="beforeInteractive"
+        />
       </head>
       <body>
         {children}
-        <Script
-          src="https://code.tidio.co/ervin220kdzm3c16kpfbae3ygkyznre6.js"
-          strategy="afterInteractive"
-        />
       </body>
     </html>
   )
