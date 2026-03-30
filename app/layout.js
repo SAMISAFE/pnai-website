@@ -23,8 +23,8 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#0A0F0E" />
         <Script
-          id="respondio__growth_tool"
-          src="https://cdn.respond.io/widget/widget.js?wId=233c25cd-8c63-442e-a0d5-d8b3f0fc5dcc"
+          id="respondio__widget"
+          src="https://cdn.respond.io/webchat/widget/widget.js?cId=056ce2f03cb36ea4198c7438a284b33"
           strategy="afterInteractive"
         />
         <Script
