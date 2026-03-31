@@ -27,10 +27,6 @@ export default function RootLayout({ children }) {
           src="https://cdn.respond.io/webchat/widget/widget.js?cId=056ce2f03cb36ea4198c7438a284b33"
           strategy="afterInteractive"
         />
-        <Script
-          src="https://code.tidio.co/ervin220kdzm3c16kpfbae3ygkyznre6.js"
-          strategy="beforeInteractive"
-        />
       </head>
       <body>
         {children}
