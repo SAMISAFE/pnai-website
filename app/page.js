@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
 // ============================================
 // EDIT THESE VALUES FOR YOUR BUSINESS
@@ -76,6 +76,115 @@ function ArrowLeft() {
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
     </svg>
+  )
+}
+
+function ParticleField() {
+  const canvasRef = useRef(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext("2d")
+    let animId
+    let particles = []
+    const PARTICLE_COUNT = 60
+
+    const resize = () => {
+      canvas.width = canvas.parentElement.offsetWidth
+      canvas.height = canvas.parentElement.offsetHeight
+    }
+    resize()
+    window.addEventListener("resize", resize)
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2.5 + 0.5,
+        dx: (Math.random() - 0.5) * 0.3,
+        dy: (Math.random() - 0.5) * 0.2 - 0.1,
+        opacity: Math.random() * 0.5 + 0.1,
+        pulse: Math.random() * Math.PI * 2,
+      })
+    }
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      // fog glow layers
+      const fogGrad = ctx.createRadialGradient(
+        canvas.width * 0.5, canvas.height * 0.6, 0,
+        canvas.width * 0.5, canvas.height * 0.6, canvas.width * 0.5
+      )
+      fogGrad.addColorStop(0, "rgba(15,184,142,0.06)")
+      fogGrad.addColorStop(0.5, "rgba(15,184,142,0.02)")
+      fogGrad.addColorStop(1, "transparent")
+      ctx.fillStyle = fogGrad
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      for (const p of particles) {
+        p.x += p.dx
+        p.y += p.dy
+        p.pulse += 0.015
+
+        // wrap around edges
+        if (p.x < -10) p.x = canvas.width + 10
+        if (p.x > canvas.width + 10) p.x = -10
+        if (p.y < -10) p.y = canvas.height + 10
+        if (p.y > canvas.height + 10) p.y = -10
+
+        const alpha = p.opacity * (0.6 + 0.4 * Math.sin(p.pulse))
+
+        // glow
+        const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 8)
+        glow.addColorStop(0, `rgba(15,184,142,${alpha * 0.3})`)
+        glow.addColorStop(1, "transparent")
+        ctx.fillStyle = glow
+        ctx.fillRect(p.x - p.r * 8, p.y - p.r * 8, p.r * 16, p.r * 16)
+
+        // core
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(15,184,142,${alpha})`
+        ctx.fill()
+      }
+
+      // draw faint connections between nearby particles
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x
+          const dy = particles[i].y - particles[j].y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < 120) {
+            ctx.beginPath()
+            ctx.moveTo(particles[i].x, particles[i].y)
+            ctx.lineTo(particles[j].x, particles[j].y)
+            ctx.strokeStyle = `rgba(15,184,142,${0.08 * (1 - dist / 120)})`
+            ctx.lineWidth = 0.5
+            ctx.stroke()
+          }
+        }
+      }
+
+      animId = requestAnimationFrame(draw)
+    }
+    draw()
+
+    return () => {
+      cancelAnimationFrame(animId)
+      window.removeEventListener("resize", resize)
+    }
+  }, [])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "absolute", inset: 0, width: "100%", height: "100%",
+        pointerEvents: "none", zIndex: 0,
+      }}
+    />
   )
 }
 
@@ -230,6 +339,7 @@ export default function Home() {
         backgroundImage: "radial-gradient(circle at 1px 1px, rgba(15,184,142,0.07) 1px, transparent 0)",
         backgroundSize: "40px 40px",
       }}>
+        <ParticleField />
         <div style={{
           position: "absolute", top: "20%", left: "50%", width: 700, height: 700,
           background: "radial-gradient(circle, rgba(15,184,142,0.18) 0%, rgba(15,184,142,0.06) 40%, transparent 70%)",
