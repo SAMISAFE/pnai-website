@@ -304,6 +304,170 @@ const faqs = [
   { q: "אתם עובדים עם כל סוגי העסקים?", a: "אנחנו מתמחים בעסקים קטנים ובינוניים בישראל — חנויות, נותני שירות, סוכנויות, קליניקות, ועוד. אם יש לך עסק ואתה מרגיש שאתה טובע בעבודה ידנית — אנחנו בשבילך." },
 ]
 
+const caseStudies = [
+  {
+    initials: "SH",
+    name: "SH-Fragrances",
+    industry: "הפצת בשמים · WhatsApp, Instagram, TikTok",
+    problem: "מאות פניות ביום דרך וואטסאפ, אינסטגרם וטיקטוק — בלי יכולת לענות לכולם. לידים הלכו לאיבוד, מכירות נפלו בין הכיסאות.",
+    solution: "צ'אטבוט AI שעונה אוטומטית ב-WhatsApp ובאינסטגרם, מסנן לידים, עונה על שאלות נפוצות, ומעביר רק לידים חמים לבעל העסק.",
+    metrics: [
+      { val: "90%", label: "פחות לידים שנפלו" },
+      { val: "< 30 שנ׳", label: "זמן תגובה ממוצע" },
+      { val: "5+ שעות", label: "חיסכון יומי" },
+    ],
+  },
+  {
+    initials: "JC",
+    name: "Jatt Center",
+    industry: "מרכז מסחרי · WhatsApp, Instagram",
+    problem: "עשרות פניות חוזרות כל יום עם אותן שאלות — שעות עבודה, מיקום חנויות, מבצעים. הצוות בילה שעות על תשובות ידניות במקום לטפל בלקוחות במקום.",
+    solution: "צ'אטבוט AI שעונה מיידית על כל השאלות הנפוצות, מפנה לידים חמים לצוות, ועובד 24/7 — גם כשהמרכז סגור.",
+    metrics: [
+      { val: "80%", label: "פחות פניות חוזרות" },
+      { val: "24/7", label: "מענה אוטומטי" },
+      { val: "4+ שעות", label: "חיסכון יומי לצוות" },
+    ],
+  },
+]
+
+function CaseStudyCarousel() {
+  const [active, setActive] = useState(0)
+  const dragX = useMotionValue(0)
+
+  const onDragEnd = (_, info) => {
+    if (info.offset.x < -60 && active < caseStudies.length - 1) setActive(active + 1)
+    else if (info.offset.x > 60 && active > 0) setActive(active - 1)
+  }
+
+  return (
+    <section style={{ padding: "100px 24px", overflow: "hidden" }}>
+      <div style={{ maxWidth: 800, margin: "0 auto" }}>
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} style={{ textAlign: "center", marginBottom: 56 }}>
+          <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>לקוחות שלנו</div>
+          <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, color: "#E4F4EE" }}>תוצאות אמיתיות מעסקים אמיתיים</h2>
+        </motion.div>
+
+        {/* Carousel */}
+        <div style={{ position: "relative" }}>
+          <motion.div
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.15}
+            onDragEnd={onDragEnd}
+            style={{ x: dragX, cursor: "grab", touchAction: "pan-y" }}
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={active}
+                initial={{ opacity: 0, x: 80 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -80 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                style={{
+                  padding: 32, borderRadius: 16, background: "rgba(14,24,22,0.9)",
+                  border: "1px solid rgba(15,184,142,0.12)", backdropFilter: "blur(4px)",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: -5 }}
+                    style={{
+                      width: 52, height: 52, borderRadius: "50%", background: "rgba(15,184,142,0.13)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: 20, fontWeight: 700, color: "#0FB88E", flexShrink: 0,
+                    }}
+                  >
+                    {caseStudies[active].initials}
+                  </motion.div>
+                  <div>
+                    <div style={{ fontSize: 18, fontWeight: 700, color: "#E4F4EE" }}>{caseStudies[active].name}</div>
+                    <div style={{ fontSize: 13, color: "rgba(192,216,208,0.4)" }}>{caseStudies[active].industry}</div>
+                  </div>
+                </div>
+
+                <p style={{ fontSize: 15, color: "rgba(192,216,208,0.5)", lineHeight: 1.7, marginBottom: 20 }}>
+                  <strong style={{ color: "#E4F4EE" }}>הבעיה:</strong> {caseStudies[active].problem}
+                </p>
+                <p style={{ fontSize: 15, color: "rgba(192,216,208,0.5)", lineHeight: 1.7, marginBottom: 24 }}>
+                  <strong style={{ color: "#E4F4EE" }}>הפתרון:</strong> {caseStudies[active].solution}
+                </p>
+
+                <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
+                  {caseStudies[active].metrics.map((m, i) => (
+                    <motion.div
+                      key={`${active}-${i}`}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.15 + i * 0.1 }}
+                      style={{ textAlign: "center", flex: "1 1 100px" }}
+                    >
+                      <div style={{ fontSize: 28, fontWeight: 700, color: "#0FB88E" }}>{m.val}</div>
+                      <div style={{ fontSize: 12, color: "rgba(192,216,208,0.4)", marginTop: 2 }}>{m.label}</div>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Navigation arrows */}
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 24, marginTop: 32 }}>
+            <motion.button
+              onClick={() => setActive(Math.max(0, active - 1))}
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.9 }}
+              style={{
+                width: 44, height: 44, borderRadius: "50%",
+                background: active > 0 ? "rgba(15,184,142,0.12)" : "rgba(15,184,142,0.04)",
+                border: "1px solid rgba(15,184,142,0.15)", cursor: active > 0 ? "pointer" : "default",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                opacity: active > 0 ? 1 : 0.3,
+              }}
+            >
+              <ArrowLeft size={18} color="#0FB88E" style={{ transform: "rotate(180deg)" }} />
+            </motion.button>
+
+            {/* Dots */}
+            <div style={{ display: "flex", gap: 10 }}>
+              {caseStudies.map((_, i) => (
+                <motion.button
+                  key={i}
+                  onClick={() => setActive(i)}
+                  animate={{
+                    width: i === active ? 28 : 10,
+                    background: i === active ? "#0FB88E" : "rgba(15,184,142,0.2)",
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  style={{
+                    height: 10, borderRadius: 5, border: "none", cursor: "pointer", padding: 0,
+                  }}
+                />
+              ))}
+            </div>
+
+            <motion.button
+              onClick={() => setActive(Math.min(caseStudies.length - 1, active + 1))}
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.9 }}
+              style={{
+                width: 44, height: 44, borderRadius: "50%",
+                background: active < caseStudies.length - 1 ? "rgba(15,184,142,0.12)" : "rgba(15,184,142,0.04)",
+                border: "1px solid rgba(15,184,142,0.15)",
+                cursor: active < caseStudies.length - 1 ? "pointer" : "default",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                opacity: active < caseStudies.length - 1 ? 1 : 0.3,
+              }}
+            >
+              <ArrowLeft size={18} color="#0FB88E" />
+            </motion.button>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // --- Main Component ---
 export default function Home() {
   const [mobileMenu, setMobileMenu] = useState(false)
@@ -656,54 +820,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CASE STUDY */}
-      <section style={{ padding: "100px 24px", maxWidth: 800, margin: "0 auto" }}>
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} style={{ textAlign: "center", marginBottom: 56 }}>
-          <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>מקרה לקוח</div>
-          <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, color: "#E4F4EE" }}>תוצאות אמיתיות מעסקים אמיתיים</h2>
-        </motion.div>
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          variants={scaleIn}
-          style={{ padding: 32, borderRadius: 16, background: "rgba(14,24,22,0.9)", border: "1px solid rgba(15,184,142,0.12)", backdropFilter: "blur(4px)" }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
-            <motion.div
-              whileHover={{ scale: 1.1, rotate: -5 }}
-              style={{
-                width: 52, height: 52, borderRadius: "50%", background: "rgba(15,184,142,0.13)",
-                display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 700, color: "#0FB88E",
-              }}
-            >SH</motion.div>
-            <div>
-              <div style={{ fontSize: 18, fontWeight: 700, color: "#E4F4EE" }}>SH-Fragrances</div>
-              <div style={{ fontSize: 13, color: "rgba(192,216,208,0.4)" }}>הפצת בשמים · WhatsApp, Instagram, TikTok</div>
-            </div>
-          </div>
-          <p style={{ fontSize: 15, color: "rgba(192,216,208,0.5)", lineHeight: 1.7, marginBottom: 20 }}>
-            <strong style={{ color: "#E4F4EE" }}>הבעיה:</strong> מאות פניות ביום דרך וואטסאפ, אינסטגרם וטיקטוק — בלי יכולת לענות לכולם. לידים הלכו לאיבוד, מכירות נפלו בין הכיסאות.
-          </p>
-          <p style={{ fontSize: 15, color: "rgba(192,216,208,0.5)", lineHeight: 1.7, marginBottom: 24 }}>
-            <strong style={{ color: "#E4F4EE" }}>הפתרון:</strong> צ'אטבוט AI שעונה אוטומטית ב-WhatsApp ובאינסטגרם, מסנן לידים, עונה על שאלות נפוצות, ומעביר רק לידים חמים לבעל העסק.
-          </p>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={stagger}
-            style={{ display: "flex", gap: 24, flexWrap: "wrap" }}
-          >
-            {[{ val: "90%", label: "פחות לידים שנפלו" }, { val: "< 30 שנ׳", label: "זמן תגובה ממוצע" }, { val: "5+ שעות", label: "חיסכון יומי" }].map((m, i) => (
-              <motion.div key={i} variants={fadeUp} custom={i} style={{ textAlign: "center", flex: "1 1 100px" }}>
-                <div style={{ fontSize: 28, fontWeight: 700, color: "#0FB88E" }}>{m.val}</div>
-                <div style={{ fontSize: 12, color: "rgba(192,216,208,0.4)", marginTop: 2 }}>{m.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </motion.div>
-      </section>
+      {/* CASE STUDIES CAROUSEL */}
+      <CaseStudyCarousel />
 
       {/* ABOUT */}
       <section id="about" style={{ padding: "100px 24px", background: "rgba(10,15,14,0.92)", backdropFilter: "blur(2px)" }}>
