@@ -344,7 +344,7 @@ function CaseStudyCard({ study, isActive }) {
         background: isActive ? "rgba(14,24,22,0.9)" : "rgba(14,24,22,0.5)",
         border: isActive ? "1.5px solid rgba(15,184,142,0.2)" : "1px solid rgba(15,184,142,0.06)",
         backdropFilter: "blur(4px)",
-        minWidth: 340, maxWidth: 420, flex: "0 0 auto",
+        width: "100%",
         cursor: "pointer",
       }}
     >
@@ -416,21 +416,23 @@ function CaseStudyCarousel() {
         ref={trackRef}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
-        style={{ position: "relative", padding: "0 24px" }}
+        style={{ position: "relative", overflow: "hidden", padding: "20px 0" }}
       >
-        <motion.div
-          animate={{ x: `calc(50% - ${active * 460 + 210}px)` }}
-          transition={{ type: "spring", stiffness: 200, damping: 30 }}
-          style={{
-            display: "flex", gap: 24, width: "max-content",
-          }}
-        >
-          {caseStudies.map((study, i) => (
-            <div key={i} onClick={() => handleUserInteract(i)}>
-              <CaseStudyCard study={study} isActive={i === active} />
-            </div>
-          ))}
-        </motion.div>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <motion.div
+            animate={{ x: -(active * (440 + 24)) }}
+            transition={{ type: "spring", stiffness: 200, damping: 30 }}
+            style={{
+              display: "flex", gap: 24, width: "max-content",
+            }}
+          >
+            {caseStudies.map((study, i) => (
+              <div key={i} onClick={() => handleUserInteract(i)} style={{ width: 440, flexShrink: 0 }}>
+                <CaseStudyCard study={study} isActive={i === active} />
+              </div>
+            ))}
+          </motion.div>
+        </div>
       </div>
 
       {/* Dots + progress */}
