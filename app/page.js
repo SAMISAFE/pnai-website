@@ -411,28 +411,42 @@ function CaseStudyCarousel() {
         </motion.div>
       </div>
 
-      {/* Sliding track */}
+      {/* Cards */}
       <div
         ref={trackRef}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
-        style={{ position: "relative", overflow: "hidden", padding: "20px 0" }}
+        style={{
+          position: "relative",
+          height: 380,
+          maxWidth: 900,
+          margin: "0 auto",
+          padding: "0 24px",
+        }}
       >
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <motion.div
-            animate={{ x: -(active * (440 + 24)) }}
-            transition={{ type: "spring", stiffness: 200, damping: 30 }}
-            style={{
-              display: "flex", gap: 24, width: "max-content",
-            }}
-          >
-            {caseStudies.map((study, i) => (
-              <div key={i} onClick={() => handleUserInteract(i)} style={{ width: 440, flexShrink: 0 }}>
-                <CaseStudyCard study={study} isActive={i === active} />
-              </div>
-            ))}
-          </motion.div>
-        </div>
+        {caseStudies.map((study, i) => {
+          const offset = i - active
+          return (
+            <motion.div
+              key={i}
+              animate={{
+                x: `calc(${offset * 55}% + ${offset * 12}px)`,
+                zIndex: i === active ? 2 : 1,
+              }}
+              transition={{ type: "spring", stiffness: 200, damping: 28 }}
+              onClick={() => handleUserInteract(i)}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: "50%",
+                width: "min(440px, 85vw)",
+                marginLeft: "min(-220px, -42.5vw)",
+              }}
+            >
+              <CaseStudyCard study={study} isActive={i === active} />
+            </motion.div>
+          )
+        })}
       </div>
 
       {/* Dots + progress */}
