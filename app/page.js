@@ -88,11 +88,11 @@ function ParticleField() {
     const ctx = canvas.getContext("2d")
     let animId
     let particles = []
-    const PARTICLE_COUNT = 60
+    const PARTICLE_COUNT = 80
 
     const resize = () => {
-      canvas.width = canvas.parentElement.offsetWidth
-      canvas.height = canvas.parentElement.offsetHeight
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
     }
     resize()
     window.addEventListener("resize", resize)
@@ -253,6 +253,11 @@ export default function Home() {
 
   return (
     <>
+      {/* PARTICLE BACKGROUND */}
+      <div style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}>
+        <ParticleField />
+      </div>
+
       {/* NAV */}
       <nav className="main-nav" style={{
         position: "fixed", top: 0, right: 0, left: 0, zIndex: 50,
@@ -339,12 +344,6 @@ export default function Home() {
         backgroundImage: "radial-gradient(circle at 1px 1px, rgba(15,184,142,0.07) 1px, transparent 0)",
         backgroundSize: "40px 40px",
       }}>
-        <ParticleField />
-        <div style={{
-          position: "absolute", top: "20%", left: "50%", width: 700, height: 700,
-          background: "radial-gradient(circle, rgba(15,184,142,0.18) 0%, rgba(15,184,142,0.06) 40%, transparent 70%)",
-          transform: "translate(-50%, -50%)", borderRadius: "50%", pointerEvents: "none",
-        }}/>
         <div style={{ marginBottom: 32, animation: "fadeUp 0.7s ease-out both" }}><Logo size="lg" /></div>
         <h1 style={{
           fontSize: "clamp(32px, 6vw, 56px)", fontWeight: 700, color: "#E4F4EE",
