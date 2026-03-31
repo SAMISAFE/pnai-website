@@ -177,6 +177,50 @@ function ParticleField() {
   )
 }
 
+function RevealOnScroll({ children, delay = 0, className = "" }) {
+  const [ref, visible] = useScrollReveal()
+  return (
+    <div ref={ref} className={`reveal ${visible ? "visible" : ""} ${delay ? `reveal-delay-${delay}` : ""} ${className}`}>
+      {children}
+    </div>
+  )
+}
+
+function useScrollReveal(threshold = 0.15) {
+  const ref = useRef(null)
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } }, { threshold })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [threshold])
+  return [ref, visible]
+}
+
+function AnimatedCounter({ value, suffix = "", duration = 2000 }) {
+  const [display, setDisplay] = useState("0")
+  const [ref, visible] = useScrollReveal(0.3)
+  const numeric = parseFloat(value.replace(/[^0-9.]/g, ""))
+  const prefix = value.match(/^[^0-9]*/)?.[0] || ""
+
+  useEffect(() => {
+    if (!visible || isNaN(numeric)) { setDisplay(value); return }
+    const start = performance.now()
+    const step = (now) => {
+      const progress = Math.min((now - start) / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      const current = Math.round(eased * numeric)
+      setDisplay(`${prefix}${current}${suffix}`)
+      if (progress < 1) requestAnimationFrame(step)
+    }
+    requestAnimationFrame(step)
+  }, [visible, numeric, prefix, suffix, duration, value])
+
+  return <span ref={ref}>{display}</span>
+}
+
 const services = [
   {
     tier: "Tier 1", title: "אבחון AI + המלצות", subtitle: "ייעוץ",
@@ -300,6 +344,56 @@ export default function Home() {
             border-bottom-color: transparent !important;
           }
         }
+        .reveal {
+          opacity: 0;
+          transform: translateY(32px);
+          transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .reveal.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .service-card {
+          transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+        }
+        .service-card:hover {
+          transform: translateY(-6px) !important;
+          box-shadow: 0 12px 40px rgba(15,184,142,0.12) !important;
+          border-color: rgba(15,184,142,0.3) !important;
+        }
+        .cta-btn {
+          transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+        }
+        .cta-btn:hover {
+          transform: scale(1.04) !important;
+          box-shadow: 0 6px 24px rgba(15,184,142,0.2) !important;
+        }
+        .faq-item {
+          transition: transform 0.2s ease, border-color 0.3s ease !important;
+        }
+        .faq-item:hover {
+          border-color: rgba(15,184,142,0.2) !important;
+          transform: translateX(-4px) !important;
+        }
+        .step-row {
+          transition: transform 0.2s ease !important;
+        }
+        .step-row:hover {
+          transform: translateX(-6px) !important;
+        }
+        .section-solid {
+          position: relative;
+          background: rgba(10,15,14,0.92);
+          backdrop-filter: blur(2px);
+        }
+        .section-glass {
+          position: relative;
+          background: rgba(10,15,14,0.7);
+          backdrop-filter: blur(1px);
+        }
       `}</style>
 
       {/* MOBILE MENU */}
@@ -347,13 +441,13 @@ export default function Home() {
           אנחנו עוזרים לעסקים קטנים ובינוניים בישראל לחסוך זמן, לאטמט תהליכים, ולתת ל-AI לעבוד בשבילם
         </p>
         <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center", animation: "fadeUp 0.7s ease-out 0.3s both" }}>
-          <a href={waLink} target="_blank" rel="noopener noreferrer" style={{
+          <a href={waLink} target="_blank" rel="noopener noreferrer" className="cta-btn" style={{
             display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px",
             background: "#0FB88E", color: "#0A0F0E", borderRadius: 10, fontSize: 16, fontWeight: 500,
           }}>
             <WhatsAppIcon /> בואו נדבר
           </a>
-          <button onClick={() => scrollTo("services")} style={{
+          <button onClick={() => scrollTo("services")} className="cta-btn" style={{
             display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px",
             background: "transparent", color: "#0FB88E", border: "1.5px solid rgba(15,184,142,0.2)",
             borderRadius: 10, fontSize: 16, fontWeight: 500, cursor: "pointer", fontFamily: "inherit",
@@ -366,28 +460,35 @@ export default function Home() {
           animation: "fadeUp 0.7s ease-out 0.4s both",
         }}>
           {stats.map((s, i) => (
-            <div key={i} style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 36, fontWeight: 700, color: "#0FB88E" }}>{s.value}</div>
-              <div style={{ fontSize: 13, color: "rgba(192,216,208,0.4)", maxWidth: 180, marginTop: 4 }}>{s.label}</div>
-            </div>
+            <RevealOnScroll key={i} delay={i + 1}>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: 36, fontWeight: 700, color: "#0FB88E" }}>
+                  <AnimatedCounter value={s.value} suffix={s.value.includes("%") ? "%" : s.value.includes("x") ? "x" : ""} />
+                </div>
+                <div style={{ fontSize: 13, color: "rgba(192,216,208,0.4)", maxWidth: 180, marginTop: 4 }}>{s.label}</div>
+              </div>
+            </RevealOnScroll>
           ))}
         </div>
       </section>
 
       {/* SERVICES */}
-      <section id="services" style={{ padding: "100px 24px", maxWidth: 900, margin: "0 auto" }}>
-        <div style={{ textAlign: "center", marginBottom: 56 }}>
-          <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>שירותים</div>
-          <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, color: "#E4F4EE", marginBottom: 12 }}>בחרו את המסלול שמתאים לכם</h2>
-          <p style={{ fontSize: 16, color: "rgba(192,216,208,0.4)", maxWidth: 480, margin: "0 auto" }}>בין אם אתם צריכים כיוון או פתרון מלא — יש לנו מסלול בשבילכם</p>
-        </div>
+      <section id="services" className="section-glass" style={{ padding: "100px 24px" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto" }}>
+        <RevealOnScroll>
+          <div style={{ textAlign: "center", marginBottom: 56 }}>
+            <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>שירותים</div>
+            <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, color: "#E4F4EE", marginBottom: 12 }}>בחרו את המסלול שמתאים לכם</h2>
+            <p style={{ fontSize: 16, color: "rgba(192,216,208,0.4)", maxWidth: 480, margin: "0 auto" }}>בין אם אתם צריכים כיוון או פתרון מלא — יש לנו מסלול בשבילכם</p>
+          </div>
+        </RevealOnScroll>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))", gap: 24 }}>
           {services.map((svc, i) => (
-            <div key={i} style={{
+            <RevealOnScroll key={i} delay={i + 1}>
+            <div className="service-card" style={{
               padding: 32, borderRadius: 16, position: "relative",
               background: svc.highlighted ? "linear-gradient(135deg, #0E1816 0%, #0A1412 100%)" : "#0E1816",
               border: svc.highlighted ? "1.5px solid rgba(15,184,142,0.25)" : "1px solid rgba(15,184,142,0.08)",
-              transition: "all 0.3s",
             }}>
               {svc.highlighted && (
                 <div style={{
@@ -407,7 +508,7 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <a href={waLink} target="_blank" rel="noopener noreferrer" style={{
+              <a href={waLink} target="_blank" rel="noopener noreferrer" className="cta-btn" style={{
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                 width: "100%", padding: "14px 32px", borderRadius: 10, fontSize: 16, fontWeight: 500,
                 fontFamily: "inherit", cursor: "pointer", transition: "all 0.2s",
@@ -418,28 +519,31 @@ export default function Home() {
                 <WhatsAppIcon /> {svc.cta}
               </a>
             </div>
+            </RevealOnScroll>
           ))}
+        </div>
         </div>
       </section>
 
       {/* PROCESS */}
-      <section id="process" style={{
+      <section id="process" className="section-solid" style={{
         padding: "100px 24px",
-        backgroundImage: "radial-gradient(circle at 1px 1px, rgba(15,184,142,0.03) 1px, transparent 0)",
-        backgroundSize: "40px 40px",
       }}>
         <div style={{ maxWidth: 800, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 56 }}>
-            <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>איך זה עובד</div>
-            <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, color: "#E4F4EE" }}>מעסק עמוס לעסק חכם — ב-4 צעדים</h2>
-          </div>
+          <RevealOnScroll>
+            <div style={{ textAlign: "center", marginBottom: 56 }}>
+              <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>איך זה עובד</div>
+              <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, color: "#E4F4EE" }}>מעסק עמוס לעסק חכם — ב-4 צעדים</h2>
+            </div>
+          </RevealOnScroll>
           <div style={{ display: "flex", flexDirection: "column", position: "relative" }}>
             <div style={{
               position: "absolute", top: 28, bottom: 28, right: 27, width: 2,
               background: "linear-gradient(to bottom, rgba(15,184,142,0.25), rgba(15,184,142,0.06))", borderRadius: 2,
             }}/>
             {steps.map((step, i) => (
-              <div key={i} style={{ display: "flex", gap: 24, alignItems: "flex-start", padding: "24px 0", position: "relative" }}>
+              <RevealOnScroll key={i} delay={i < 3 ? i + 1 : 3}>
+              <div className="step-row" style={{ display: "flex", gap: 24, alignItems: "flex-start", padding: "24px 0", position: "relative" }}>
                 <div style={{
                   width: 56, height: 56, borderRadius: "50%", flexShrink: 0,
                   background: i === 3 ? "#0FB88E" : "#0E1816",
@@ -454,6 +558,7 @@ export default function Home() {
                   <p style={{ fontSize: 15, color: "rgba(192,216,208,0.45)", lineHeight: 1.6 }}>{step.desc}</p>
                 </div>
               </div>
+              </RevealOnScroll>
             ))}
           </div>
         </div>
@@ -461,11 +566,14 @@ export default function Home() {
 
       {/* CASE STUDY */}
       <section style={{ padding: "100px 24px", maxWidth: 800, margin: "0 auto" }}>
-        <div style={{ textAlign: "center", marginBottom: 56 }}>
-          <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>מקרה לקוח</div>
-          <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, color: "#E4F4EE" }}>תוצאות אמיתיות מעסקים אמיתיים</h2>
-        </div>
-        <div style={{ padding: 32, borderRadius: 16, background: "#0E1816", border: "1px solid rgba(15,184,142,0.08)" }}>
+        <RevealOnScroll>
+          <div style={{ textAlign: "center", marginBottom: 56 }}>
+            <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>מקרה לקוח</div>
+            <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, color: "#E4F4EE" }}>תוצאות אמיתיות מעסקים אמיתיים</h2>
+          </div>
+        </RevealOnScroll>
+        <RevealOnScroll delay={1}>
+        <div style={{ padding: 32, borderRadius: 16, background: "rgba(14,24,22,0.9)", border: "1px solid rgba(15,184,142,0.12)", backdropFilter: "blur(4px)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
             <div style={{
               width: 52, height: 52, borderRadius: "50%", background: "rgba(15,184,142,0.13)",
@@ -491,15 +599,15 @@ export default function Home() {
             ))}
           </div>
         </div>
+        </RevealOnScroll>
       </section>
 
       {/* ABOUT */}
-      <section id="about" style={{
+      <section id="about" className="section-solid" style={{
         padding: "100px 24px",
-        backgroundImage: "radial-gradient(circle at 1px 1px, rgba(15,184,142,0.03) 1px, transparent 0)",
-        backgroundSize: "40px 40px",
       }}>
         <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
+          <RevealOnScroll>
           <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>אודות</div>
           <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, color: "#E4F4EE", marginBottom: 20 }}>הסיפור שלנו</h2>
           <div style={{
@@ -516,24 +624,29 @@ export default function Home() {
           <p style={{ fontSize: 17, color: "rgba(192,216,208,0.65)", lineHeight: 1.8, marginBottom: 32 }}>
             לא מדובר בטכנולוגיה מסובכת. מדובר בפנאי — הזמן שאתה מרוויח בחזרה כשה-AI עובד במקומך.
           </p>
-          <a href={waLink} target="_blank" rel="noopener noreferrer" style={{
+          <a href={waLink} target="_blank" rel="noopener noreferrer" className="cta-btn" style={{
             display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px",
             background: "#0FB88E", color: "#0A0F0E", borderRadius: 10, fontSize: 16, fontWeight: 500,
           }}>
             <WhatsAppIcon /> בואו נכיר
           </a>
+          </RevealOnScroll>
         </div>
       </section>
 
       {/* FAQ */}
-      <section id="faq" style={{ padding: "100px 24px", maxWidth: 700, margin: "0 auto" }}>
-        <div style={{ textAlign: "center", marginBottom: 56 }}>
-          <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>שאלות נפוצות</div>
-          <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, color: "#E4F4EE" }}>יש שאלות? יש לנו תשובות</h2>
-        </div>
+      <section id="faq" className="section-glass" style={{ padding: "100px 24px" }}>
+        <div style={{ maxWidth: 700, margin: "0 auto" }}>
+        <RevealOnScroll>
+          <div style={{ textAlign: "center", marginBottom: 56 }}>
+            <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>שאלות נפוצות</div>
+            <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, color: "#E4F4EE" }}>יש שאלות? יש לנו תשובות</h2>
+          </div>
+        </RevealOnScroll>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {faqs.map((faq, i) => (
-            <div key={i} onClick={() => setOpenFaq(openFaq === i ? null : i)} style={{
+            <RevealOnScroll key={i} delay={i < 3 ? i + 1 : 3}>
+            <div className="faq-item" onClick={() => setOpenFaq(openFaq === i ? null : i)} style={{
               borderRadius: 12, overflow: "hidden", cursor: "pointer",
               background: "#0E1816", border: "1px solid rgba(15,184,142,0.08)", transition: "all 0.3s",
             }}>
@@ -550,16 +663,19 @@ export default function Home() {
                 </div>
               )}
             </div>
+            </RevealOnScroll>
           ))}
+        </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section style={{
+      <section className="section-solid" style={{
         padding: "80px 24px", textAlign: "center",
-        background: "linear-gradient(to bottom, #0A0F0E, #0E1816)",
+        background: "linear-gradient(to bottom, rgba(10,15,14,0.95), rgba(14,24,22,0.98))",
       }}>
         <div style={{ maxWidth: 500, margin: "0 auto" }}>
+          <RevealOnScroll>
           <HourglassIcon size={48} />
           <h2 style={{ fontSize: "clamp(28px, 4vw, 36px)", fontWeight: 700, color: "#E4F4EE", margin: "20px 0 12px" }}>
             מוכנים לקבל את הזמן שלכם בחזרה?
@@ -567,6 +683,7 @@ export default function Home() {
           <p style={{ fontSize: 16, color: "rgba(192,216,208,0.4)", marginBottom: 32 }}>
             שיחה קצרה. בלי התחייבות. בואו נבדוק מה AI יכול לעשות לעסק שלכם.
           </p>
+          </RevealOnScroll>
 
           {/* Contact Form */}
           {formSent ? (
@@ -635,6 +752,7 @@ export default function Home() {
       <footer style={{
         padding: "40px 24px", borderTop: "1px solid rgba(15,184,142,0.08)",
         display: "flex", flexDirection: "column", alignItems: "center", gap: 16,
+        background: "rgba(10,15,14,0.95)",
       }}>
         <Logo size="sm" />
         <p style={{ fontSize: 13, color: "rgba(192,216,208,0.25)" }}>הזמן שלך יקר לנו</p>
