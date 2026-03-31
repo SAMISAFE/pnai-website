@@ -112,17 +112,6 @@ function ParticleField() {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // fog glow layers
-      const fogGrad = ctx.createRadialGradient(
-        canvas.width * 0.5, canvas.height * 0.6, 0,
-        canvas.width * 0.5, canvas.height * 0.6, canvas.width * 0.5
-      )
-      fogGrad.addColorStop(0, "rgba(15,184,142,0.06)")
-      fogGrad.addColorStop(0.5, "rgba(15,184,142,0.02)")
-      fogGrad.addColorStop(1, "transparent")
-      ctx.fillStyle = fogGrad
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-
       for (const p of particles) {
         p.x += p.dx
         p.y += p.dy
