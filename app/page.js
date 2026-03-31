@@ -331,138 +331,140 @@ const caseStudies = [
   },
 ]
 
+function CaseStudyCard({ study, isActive }) {
+  return (
+    <motion.div
+      animate={{
+        scale: isActive ? 1 : 0.93,
+        opacity: isActive ? 1 : 0.5,
+      }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      style={{
+        padding: 32, borderRadius: 16,
+        background: isActive ? "rgba(14,24,22,0.9)" : "rgba(14,24,22,0.5)",
+        border: isActive ? "1.5px solid rgba(15,184,142,0.2)" : "1px solid rgba(15,184,142,0.06)",
+        backdropFilter: "blur(4px)",
+        minWidth: 340, maxWidth: 420, flex: "0 0 auto",
+        cursor: "pointer",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 18 }}>
+        <div style={{
+          width: 48, height: 48, borderRadius: "50%", background: "rgba(15,184,142,0.13)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 18, fontWeight: 700, color: "#0FB88E", flexShrink: 0,
+        }}>
+          {study.initials}
+        </div>
+        <div>
+          <div style={{ fontSize: 17, fontWeight: 700, color: "#E4F4EE" }}>{study.name}</div>
+          <div style={{ fontSize: 12, color: "rgba(192,216,208,0.4)" }}>{study.industry}</div>
+        </div>
+      </div>
+
+      <p style={{ fontSize: 14, color: "rgba(192,216,208,0.5)", lineHeight: 1.65, marginBottom: 14 }}>
+        <strong style={{ color: "#E4F4EE" }}>הבעיה:</strong> {study.problem}
+      </p>
+      <p style={{ fontSize: 14, color: "rgba(192,216,208,0.5)", lineHeight: 1.65, marginBottom: 20 }}>
+        <strong style={{ color: "#E4F4EE" }}>הפתרון:</strong> {study.solution}
+      </p>
+
+      <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+        {study.metrics.map((m, i) => (
+          <div key={i} style={{ textAlign: "center", flex: "1 1 80px" }}>
+            <div style={{ fontSize: 24, fontWeight: 700, color: "#0FB88E" }}>{m.val}</div>
+            <div style={{ fontSize: 11, color: "rgba(192,216,208,0.4)", marginTop: 2 }}>{m.label}</div>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  )
+}
+
 function CaseStudyCarousel() {
   const [active, setActive] = useState(0)
-  const dragX = useMotionValue(0)
+  const [paused, setPaused] = useState(false)
+  const trackRef = useRef(null)
 
-  const onDragEnd = (_, info) => {
-    if (info.offset.x < -60 && active < caseStudies.length - 1) setActive(active + 1)
-    else if (info.offset.x > 60 && active > 0) setActive(active - 1)
+  // Auto-advance every 3s
+  useEffect(() => {
+    if (paused) return
+    const timer = setInterval(() => {
+      setActive(prev => (prev + 1) % caseStudies.length)
+    }, 3000)
+    return () => clearInterval(timer)
+  }, [paused])
+
+  // Pause on user interaction, resume after 5s
+  const handleUserInteract = (index) => {
+    setActive(index)
+    setPaused(true)
+    setTimeout(() => setPaused(false), 5000)
   }
 
   return (
-    <section style={{ padding: "100px 24px", overflow: "hidden" }}>
-      <div style={{ maxWidth: 800, margin: "0 auto" }}>
+    <section style={{ padding: "100px 0", overflow: "hidden" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px" }}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} style={{ textAlign: "center", marginBottom: 56 }}>
           <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>לקוחות שלנו</div>
           <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, color: "#E4F4EE" }}>תוצאות אמיתיות מעסקים אמיתיים</h2>
         </motion.div>
+      </div>
 
-        {/* Carousel */}
-        <div style={{ position: "relative" }}>
-          <motion.div
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.15}
-            onDragEnd={onDragEnd}
-            style={{ x: dragX, cursor: "grab", touchAction: "pan-y" }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={active}
-                initial={{ opacity: 0, x: 80 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -80 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                style={{
-                  padding: 32, borderRadius: 16, background: "rgba(14,24,22,0.9)",
-                  border: "1px solid rgba(15,184,142,0.12)", backdropFilter: "blur(4px)",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
-                  <motion.div
-                    whileHover={{ scale: 1.1, rotate: -5 }}
-                    style={{
-                      width: 52, height: 52, borderRadius: "50%", background: "rgba(15,184,142,0.13)",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 20, fontWeight: 700, color: "#0FB88E", flexShrink: 0,
-                    }}
-                  >
-                    {caseStudies[active].initials}
-                  </motion.div>
-                  <div>
-                    <div style={{ fontSize: 18, fontWeight: 700, color: "#E4F4EE" }}>{caseStudies[active].name}</div>
-                    <div style={{ fontSize: 13, color: "rgba(192,216,208,0.4)" }}>{caseStudies[active].industry}</div>
-                  </div>
-                </div>
-
-                <p style={{ fontSize: 15, color: "rgba(192,216,208,0.5)", lineHeight: 1.7, marginBottom: 20 }}>
-                  <strong style={{ color: "#E4F4EE" }}>הבעיה:</strong> {caseStudies[active].problem}
-                </p>
-                <p style={{ fontSize: 15, color: "rgba(192,216,208,0.5)", lineHeight: 1.7, marginBottom: 24 }}>
-                  <strong style={{ color: "#E4F4EE" }}>הפתרון:</strong> {caseStudies[active].solution}
-                </p>
-
-                <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
-                  {caseStudies[active].metrics.map((m, i) => (
-                    <motion.div
-                      key={`${active}-${i}`}
-                      initial={{ opacity: 0, y: 16 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.15 + i * 0.1 }}
-                      style={{ textAlign: "center", flex: "1 1 100px" }}
-                    >
-                      <div style={{ fontSize: 28, fontWeight: 700, color: "#0FB88E" }}>{m.val}</div>
-                      <div style={{ fontSize: 12, color: "rgba(192,216,208,0.4)", marginTop: 2 }}>{m.label}</div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-
-          {/* Navigation arrows */}
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 24, marginTop: 32 }}>
-            <motion.button
-              onClick={() => setActive(Math.max(0, active - 1))}
-              whileHover={{ scale: 1.15 }}
-              whileTap={{ scale: 0.9 }}
-              style={{
-                width: 44, height: 44, borderRadius: "50%",
-                background: active > 0 ? "rgba(15,184,142,0.12)" : "rgba(15,184,142,0.04)",
-                border: "1px solid rgba(15,184,142,0.15)", cursor: active > 0 ? "pointer" : "default",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                opacity: active > 0 ? 1 : 0.3,
-              }}
-            >
-              <ArrowLeft size={18} color="#0FB88E" style={{ transform: "rotate(180deg)" }} />
-            </motion.button>
-
-            {/* Dots */}
-            <div style={{ display: "flex", gap: 10 }}>
-              {caseStudies.map((_, i) => (
-                <motion.button
-                  key={i}
-                  onClick={() => setActive(i)}
-                  animate={{
-                    width: i === active ? 28 : 10,
-                    background: i === active ? "#0FB88E" : "rgba(15,184,142,0.2)",
-                  }}
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                  style={{
-                    height: 10, borderRadius: 5, border: "none", cursor: "pointer", padding: 0,
-                  }}
-                />
-              ))}
+      {/* Sliding track */}
+      <div
+        ref={trackRef}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        style={{ position: "relative", padding: "0 24px" }}
+      >
+        <motion.div
+          animate={{ x: `calc(50% - ${active * 460 + 210}px)` }}
+          transition={{ type: "spring", stiffness: 200, damping: 30 }}
+          style={{
+            display: "flex", gap: 24, width: "max-content",
+          }}
+        >
+          {caseStudies.map((study, i) => (
+            <div key={i} onClick={() => handleUserInteract(i)}>
+              <CaseStudyCard study={study} isActive={i === active} />
             </div>
+          ))}
+        </motion.div>
+      </div>
 
-            <motion.button
-              onClick={() => setActive(Math.min(caseStudies.length - 1, active + 1))}
-              whileHover={{ scale: 1.15 }}
-              whileTap={{ scale: 0.9 }}
-              style={{
-                width: 44, height: 44, borderRadius: "50%",
-                background: active < caseStudies.length - 1 ? "rgba(15,184,142,0.12)" : "rgba(15,184,142,0.04)",
-                border: "1px solid rgba(15,184,142,0.15)",
-                cursor: active < caseStudies.length - 1 ? "pointer" : "default",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                opacity: active < caseStudies.length - 1 ? 1 : 0.3,
-              }}
-            >
-              <ArrowLeft size={18} color="#0FB88E" />
-            </motion.button>
-          </div>
-        </div>
+      {/* Dots + progress */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, marginTop: 36 }}>
+        {caseStudies.map((_, i) => (
+          <motion.button
+            key={i}
+            onClick={() => handleUserInteract(i)}
+            style={{
+              height: 4, borderRadius: 2, border: "none", cursor: "pointer", padding: 0,
+              background: "rgba(15,184,142,0.15)", position: "relative", overflow: "hidden",
+              width: 48,
+            }}
+          >
+            {i === active && (
+              <motion.div
+                key={`progress-${active}`}
+                initial={{ width: "0%" }}
+                animate={{ width: "100%" }}
+                transition={{ duration: paused ? 99 : 3, ease: "linear" }}
+                style={{
+                  position: "absolute", top: 0, right: 0, bottom: 0,
+                  background: "#0FB88E", borderRadius: 2,
+                }}
+              />
+            )}
+            {i !== active && (
+              <div style={{
+                position: "absolute", inset: 0,
+                background: "rgba(15,184,142,0.15)", borderRadius: 2,
+              }} />
+            )}
+          </motion.button>
+        ))}
       </div>
     </section>
   )
