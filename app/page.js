@@ -358,14 +358,14 @@ function CaseStudyCard({ study, isActive }) {
         </div>
         <div>
           <div style={{ fontSize: 17, fontWeight: 700, color: "#E4F4EE" }}>{study.name}</div>
-          <div style={{ fontSize: 12, color: "rgba(192,216,208,0.4)" }}>{study.industry}</div>
+          <div style={{ fontSize: 12, color: "rgba(192,216,208,0.6)" }}>{study.industry}</div>
         </div>
       </div>
 
-      <p style={{ fontSize: 14, color: "rgba(192,216,208,0.5)", lineHeight: 1.65, marginBottom: 14 }}>
+      <p style={{ fontSize: 14, color: "rgba(192,216,208,0.7)", lineHeight: 1.65, marginBottom: 14 }}>
         <strong style={{ color: "#E4F4EE" }}>הבעיה:</strong> {study.problem}
       </p>
-      <p style={{ fontSize: 14, color: "rgba(192,216,208,0.5)", lineHeight: 1.65, marginBottom: 20 }}>
+      <p style={{ fontSize: 14, color: "rgba(192,216,208,0.7)", lineHeight: 1.65, marginBottom: 20 }}>
         <strong style={{ color: "#E4F4EE" }}>הפתרון:</strong> {study.solution}
       </p>
 
@@ -373,7 +373,7 @@ function CaseStudyCard({ study, isActive }) {
         {study.metrics.map((m, i) => (
           <div key={i} style={{ textAlign: "center", flex: "1 1 80px" }}>
             <div style={{ fontSize: 24, fontWeight: 700, color: "#0FB88E" }}>{m.val}</div>
-            <div style={{ fontSize: 11, color: "rgba(192,216,208,0.4)", marginTop: 2 }}>{m.label}</div>
+            <div style={{ fontSize: 11, color: "rgba(192,216,208,0.6)", marginTop: 2 }}>{m.label}</div>
           </div>
         ))}
       </div>
@@ -532,7 +532,7 @@ export default function Home() {
               onClick={() => scrollTo(id)}
               whileHover={{ color: "#E4F4EE", y: -1 }}
               style={{
-                color: "rgba(192,216,208,0.5)", fontSize: 14, background: "none", border: "none",
+                color: "rgba(192,216,208,0.7)", fontSize: 14, background: "none", border: "none",
                 cursor: "pointer", fontFamily: "inherit", padding: "8px 14px", borderRadius: 8,
               }}
             >
@@ -643,7 +643,7 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.65 }}
           style={{
-            fontSize: "clamp(16px, 2.5vw, 20px)", fontWeight: 300, color: "rgba(192,216,208,0.5)",
+            fontSize: "clamp(16px, 2.5vw, 20px)", fontWeight: 300, color: "rgba(192,216,208,0.7)",
             maxWidth: 520, lineHeight: 1.7, marginBottom: 40,
           }}
         >
@@ -686,7 +686,7 @@ export default function Home() {
               <div style={{ fontSize: 36, fontWeight: 700, color: "#0FB88E" }}>
                 <AnimatedCounter value={s.value} suffix={s.value.includes("%") ? "%" : s.value.includes("x") ? "x" : ""} />
               </div>
-              <div style={{ fontSize: 13, color: "rgba(192,216,208,0.4)", maxWidth: 180, marginTop: 4 }}>{s.label}</div>
+              <div style={{ fontSize: 13, color: "rgba(192,216,208,0.6)", maxWidth: 180, marginTop: 4 }}>{s.label}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -698,7 +698,7 @@ export default function Home() {
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} style={{ textAlign: "center", marginBottom: 56 }}>
             <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>שירותים</div>
             <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, color: "#E4F4EE", marginBottom: 12 }}>בחרו את המסלול שמתאים לכם</h2>
-            <p style={{ fontSize: 16, color: "rgba(192,216,208,0.4)", maxWidth: 480, margin: "0 auto" }}>בין אם אתם צריכים כיוון או פתרון מלא — יש לנו מסלול בשבילכם</p>
+            <p style={{ fontSize: 16, color: "rgba(192,216,208,0.6)", maxWidth: 480, margin: "0 auto" }}>בין אם אתם צריכים כיוון או פתרון מלא — יש לנו מסלול בשבילכם</p>
           </motion.div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))", gap: 24 }}>
             {services.map((svc, i) => (
@@ -733,7 +733,7 @@ export default function Home() {
                 )}
                 <div style={{ fontSize: 12, color: "#0FB88E", fontWeight: 500, marginBottom: 8, letterSpacing: 1 }}>{svc.tier}</div>
                 <h3 style={{ fontSize: 24, fontWeight: 700, color: "#E4F4EE", marginBottom: 4 }}>{svc.title}</h3>
-                <p style={{ fontSize: 14, color: "rgba(192,216,208,0.4)", marginBottom: 20 }}>{svc.subtitle}</p>
+                <p style={{ fontSize: 14, color: "rgba(192,216,208,0.6)", marginBottom: 20 }}>{svc.subtitle}</p>
                 <div style={{ fontSize: 16, fontWeight: 500, color: "#0FB88E", marginBottom: 24 }}>מחיר מותאם אישית</div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28 }}>
                   {svc.features.map((f, j) => (
@@ -814,7 +814,7 @@ export default function Home() {
                   </motion.div>
                   <div style={{ paddingTop: 8 }}>
                     <h3 style={{ fontSize: 20, fontWeight: 700, color: "#E4F4EE", marginBottom: 6 }}>{step.title}</h3>
-                    <p style={{ fontSize: 15, color: "rgba(192,216,208,0.45)", lineHeight: 1.6 }}>{step.desc}</p>
+                    <p style={{ fontSize: 15, color: "rgba(192,216,208,0.65)", lineHeight: 1.6 }}>{step.desc}</p>
                   </div>
                 </motion.div>
               )
@@ -911,7 +911,7 @@ export default function Home() {
                     </motion.button>
                   </Accordion.Trigger>
                   <Accordion.Content className="accordion-content">
-                    <div style={{ padding: "0 24px 18px", fontSize: 15, color: "rgba(192,216,208,0.5)", lineHeight: 1.7 }}>
+                    <div style={{ padding: "0 24px 18px", fontSize: 15, color: "rgba(192,216,208,0.7)", lineHeight: 1.7 }}>
                       {faq.a}
                     </div>
                   </Accordion.Content>
@@ -950,7 +950,7 @@ export default function Home() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.25 }}
-            style={{ fontSize: 16, color: "rgba(192,216,208,0.4)", marginBottom: 32 }}
+            style={{ fontSize: 16, color: "rgba(192,216,208,0.6)", marginBottom: 32 }}
           >
             שיחה קצרה. בלי התחייבות. בואו נבדוק מה AI יכול לעשות לעסק שלכם.
           </motion.p>
@@ -972,7 +972,7 @@ export default function Home() {
                   <Check size={32} color="#0FB88E" strokeWidth={2.5} />
                 </motion.div>
                 <p style={{ fontSize: 18, fontWeight: 600, color: "#E4F4EE", marginTop: 8 }}>תודה! קיבלנו את הפרטים</p>
-                <p style={{ fontSize: 14, color: "rgba(192,216,208,0.5)", marginTop: 4 }}>ניצור איתך קשר בהקדם</p>
+                <p style={{ fontSize: 14, color: "rgba(192,216,208,0.7)", marginTop: 4 }}>ניצור איתך קשר בהקדם</p>
               </motion.div>
             ) : (
               <motion.form
@@ -1042,7 +1042,7 @@ export default function Home() {
             )}
           </AnimatePresence>
 
-          <p style={{ fontSize: 13, color: "rgba(192,216,208,0.3)", marginBottom: 16 }}>או דברו איתנו ישירות</p>
+          <p style={{ fontSize: 13, color: "rgba(192,216,208,0.7)", marginBottom: 16 }}>או דברו איתנו ישירות</p>
           <MagneticButton href={waLink} style={{
             display: "inline-flex", alignItems: "center", gap: 8, padding: "16px 40px",
             background: "transparent", color: "#0FB88E", border: "1.5px solid rgba(15,184,142,0.25)",
@@ -1062,7 +1062,7 @@ export default function Home() {
         background: "rgba(10,15,14,0.95)",
       }}>
         <Logo size="sm" />
-        <p style={{ fontSize: 13, color: "rgba(192,216,208,0.25)" }}>הזמן שלך יקר לנו</p>
+        <p style={{ fontSize: 13, color: "rgba(192,216,208,0.65)" }}>הזמן שלך יקר לנו</p>
         <div style={{ display: "flex", gap: 24 }}>
           {[["services","שירותים"],["about","אודות"],["faq","שאלות"]].map(([id,label]) => (
             <motion.button
@@ -1070,7 +1070,7 @@ export default function Home() {
               onClick={() => scrollTo(id)}
               whileHover={{ color: "#C0D8D0", y: -2 }}
               style={{
-                color: "rgba(192,216,208,0.35)", fontSize: 13, background: "none", border: "none",
+                color: "rgba(192,216,208,0.55)", fontSize: 13, background: "none", border: "none",
                 cursor: "pointer", fontFamily: "inherit", padding: "8px 14px", borderRadius: 8,
               }}
             >
@@ -1078,7 +1078,7 @@ export default function Home() {
             </motion.button>
           ))}
         </div>
-        <p style={{ fontSize: 12, color: "rgba(192,216,208,0.2)", marginTop: 12 }}>© 2026 PNAI · כל הזכויות שמורות</p>
+        <p style={{ fontSize: 12, color: "rgba(192,216,208,0.6)", marginTop: 12 }}>© 2026 PNAI · כל הזכויות שמורות</p>
       </footer>
 
       {/* FLOATING WHATSAPP */}
