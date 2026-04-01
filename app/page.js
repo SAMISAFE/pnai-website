@@ -507,6 +507,7 @@ export default function Home() {
 
       {/* NAV */}
       <motion.nav
+        aria-label="ניווט ראשי"
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.2 }}
@@ -609,8 +610,9 @@ export default function Home() {
         )}
       </AnimatePresence>
 
+      <main>
       {/* HERO */}
-      <section id="hero" style={{
+      <section id="hero" aria-label="ייעוץ והטמעת AI לעסקים" style={{
         minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center",
         justifyContent: "center", padding: "120px 24px 80px", textAlign: "center", position: "relative",
         overflow: "hidden",
@@ -633,7 +635,7 @@ export default function Home() {
             lineHeight: 1.2, maxWidth: 700, marginBottom: 20,
           }}
         >
-          הזמן שלך יקר לנו
+          ייעוץ והטמעת AI לעסקים — הזמן שלך יקר לנו
         </motion.h1>
 
         <motion.p
@@ -691,7 +693,7 @@ export default function Home() {
       </section>
 
       {/* SERVICES */}
-      <section id="services" style={{ padding: "100px 24px", background: "rgba(10,15,14,0.7)", backdropFilter: "blur(1px)" }}>
+      <section id="services" aria-label="שירותי AI לעסקים" style={{ padding: "100px 24px", background: "rgba(10,15,14,0.7)", backdropFilter: "blur(1px)" }}>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} style={{ textAlign: "center", marginBottom: 56 }}>
             <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>שירותים</div>
@@ -765,7 +767,7 @@ export default function Home() {
       </section>
 
       {/* PROCESS */}
-      <section id="process" style={{ padding: "100px 24px", background: "rgba(10,15,14,0.92)", backdropFilter: "blur(2px)" }}>
+      <section id="process" aria-label="תהליך העבודה שלנו" style={{ padding: "100px 24px", background: "rgba(10,15,14,0.92)", backdropFilter: "blur(2px)" }}>
         <div style={{ maxWidth: 800, margin: "0 auto" }}>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} style={{ textAlign: "center", marginBottom: 56 }}>
             <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>איך זה עובד</div>
@@ -825,7 +827,7 @@ export default function Home() {
       <CaseStudyCarousel />
 
       {/* ABOUT */}
-      <section id="about" style={{ padding: "100px 24px", background: "rgba(10,15,14,0.92)", backdropFilter: "blur(2px)" }}>
+      <section id="about" aria-label="אודות PNAI" style={{ padding: "100px 24px", background: "rgba(10,15,14,0.92)", backdropFilter: "blur(2px)" }}>
         <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
             <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>אודות</div>
@@ -879,7 +881,7 @@ export default function Home() {
       </section>
 
       {/* FAQ — Radix Accordion */}
-      <section id="faq" style={{ padding: "100px 24px", background: "rgba(10,15,14,0.7)", backdropFilter: "blur(1px)" }}>
+      <section id="faq" aria-label="שאלות נפוצות" style={{ padding: "100px 24px", background: "rgba(10,15,14,0.7)", backdropFilter: "blur(1px)" }}>
         <div style={{ maxWidth: 700, margin: "0 auto" }}>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} style={{ textAlign: "center", marginBottom: 56 }}>
             <div style={{ display: "inline-block", padding: "6px 16px", borderRadius: 20, fontSize: 13, fontWeight: 500, color: "#0FB88E", background: "rgba(15,184,142,0.08)", border: "1px solid rgba(15,184,142,0.13)", marginBottom: 16 }}>שאלות נפוצות</div>
@@ -1051,6 +1053,8 @@ export default function Home() {
         </div>
       </section>
 
+      </main>
+
       {/* FOOTER */}
       <footer style={{
         padding: "40px 24px", borderTop: "1px solid rgba(15,184,142,0.08)",
@@ -1082,6 +1086,7 @@ export default function Home() {
         href={waLink}
         target="_blank"
         rel="noopener noreferrer"
+        aria-label="שלחו לנו הודעה בוואטסאפ"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", stiffness: 200, delay: 1.5 }}
