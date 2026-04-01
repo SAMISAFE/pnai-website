@@ -384,14 +384,14 @@ function CaseStudyCard({ study, isActive }) {
 function CaseStudyCarousel() {
   const [active, setActive] = useState(0)
   const [paused, setPaused] = useState(false)
-  const trackRef = useRef(null)
+  const pauseTimerRef = useRef(null)
 
-  // Auto-advance every 3s
+  // Auto-advance every 4s
   useEffect(() => {
     if (paused) return
     const timer = setInterval(() => {
       setActive(prev => (prev + 1) % caseStudies.length)
-    }, 3000)
+    }, 4000)
     return () => clearInterval(timer)
   }, [paused])
 
@@ -399,7 +399,8 @@ function CaseStudyCarousel() {
   const handleUserInteract = (index) => {
     setActive(index)
     setPaused(true)
-    setTimeout(() => setPaused(false), 5000)
+    if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current)
+    pauseTimerRef.current = setTimeout(() => setPaused(false), 5000)
   }
 
   return (
@@ -411,42 +412,28 @@ function CaseStudyCarousel() {
         </motion.div>
       </div>
 
-      {/* Cards */}
+      {/* Cards container */}
       <div
-        ref={trackRef}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         style={{
-          position: "relative",
-          height: 380,
-          maxWidth: 900,
+          display: "flex",
+          justifyContent: "center",
+          maxWidth: 1000,
           margin: "0 auto",
           padding: "0 24px",
         }}
       >
-        {caseStudies.map((study, i) => {
-          const offset = i - active
-          return (
-            <motion.div
-              key={i}
-              animate={{
-                x: `calc(${offset * 55}% + ${offset * 12}px)`,
-                zIndex: i === active ? 2 : 1,
-              }}
-              transition={{ type: "spring", stiffness: 200, damping: 28 }}
-              onClick={() => handleUserInteract(i)}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: "50%",
-                width: "min(440px, 85vw)",
-                marginLeft: "min(-220px, -42.5vw)",
-              }}
-            >
-              <CaseStudyCard study={study} isActive={i === active} />
-            </motion.div>
-          )
-        })}
+        <div
+          onClick={() => handleUserInteract((active + 1) % caseStudies.length)}
+          style={{
+            width: "100%",
+            maxWidth: 480,
+            cursor: "pointer",
+          }}
+        >
+          <CaseStudyCard study={caseStudies[active]} isActive={true} />
+        </div>
       </div>
 
       {/* Dots + progress */}
@@ -466,7 +453,7 @@ function CaseStudyCarousel() {
                 key={`progress-${active}`}
                 initial={{ width: "0%" }}
                 animate={{ width: "100%" }}
-                transition={{ duration: paused ? 99 : 3, ease: "linear" }}
+                transition={{ duration: paused ? 99 : 4, ease: "linear" }}
                 style={{
                   position: "absolute", top: 0, right: 0, bottom: 0,
                   background: "#0FB88E", borderRadius: 2,
@@ -936,29 +923,6 @@ export default function Home() {
           </Accordion.Root>
         </div>
       </section>
-
-      <style>{`
-        .accordion-content {
-          overflow: hidden;
-        }
-        .accordion-content[data-state="open"] {
-          animation: slideDown 0.3s ease-out;
-        }
-        .accordion-content[data-state="closed"] {
-          animation: slideUp 0.3s ease-out;
-        }
-        [data-state="open"] > .accordion-chevron {
-          transform: rotate(180deg);
-        }
-        @keyframes slideDown {
-          from { height: 0; opacity: 0; }
-          to { height: var(--radix-accordion-content-height); opacity: 1; }
-        }
-        @keyframes slideUp {
-          from { height: var(--radix-accordion-content-height); opacity: 1; }
-          to { height: 0; opacity: 0; }
-        }
-      `}</style>
 
       {/* CTA */}
       <section style={{
