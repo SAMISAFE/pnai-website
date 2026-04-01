@@ -384,7 +384,6 @@ function CaseStudyCard({ study, isActive }) {
 function CaseStudyCarousel() {
   const [active, setActive] = useState(0)
   const [paused, setPaused] = useState(false)
-  const pauseTimerRef = useRef(null)
 
   // Auto-advance every 4s
   useEffect(() => {
@@ -395,12 +394,9 @@ function CaseStudyCarousel() {
     return () => clearInterval(timer)
   }, [paused])
 
-  // Pause on user interaction, resume after 5s
-  const handleUserInteract = (index) => {
+  // Click just advances to the card, no pausing
+  const handleClick = (index) => {
     setActive(index)
-    setPaused(true)
-    if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current)
-    pauseTimerRef.current = setTimeout(() => setPaused(false), 5000)
   }
 
   return (
@@ -425,7 +421,7 @@ function CaseStudyCarousel() {
         }}
       >
         <div
-          onClick={() => handleUserInteract((active + 1) % caseStudies.length)}
+          onClick={() => handleClick((active + 1) % caseStudies.length)}
           style={{
             width: "100%",
             maxWidth: 480,
@@ -441,7 +437,7 @@ function CaseStudyCarousel() {
         {caseStudies.map((_, i) => (
           <motion.button
             key={i}
-            onClick={() => handleUserInteract(i)}
+            onClick={() => handleClick(i)}
             style={{
               height: 4, borderRadius: 2, border: "none", cursor: "pointer", padding: 0,
               background: "rgba(15,184,142,0.15)", position: "relative", overflow: "hidden",
@@ -520,7 +516,7 @@ export default function Home() {
           background: scrolled ? "rgba(10,15,14,0.85)" : "transparent",
           backdropFilter: scrolled ? "blur(12px)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(12px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(15,184,142,0.1)" : "1px solid transparent",
+          borderBottom: scrolled ? "1px solid rgba(15,184,142,0.15)" : "1px solid rgba(15,184,142,0.07)",
           transition: "background 0.3s, backdrop-filter 0.3s, border 0.3s",
           display: "flex", justifyContent: "space-between", alignItems: "center",
         }}
